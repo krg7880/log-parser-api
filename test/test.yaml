@@ -1,13 +1,6 @@
 version: "3.2"
 services:
   api:
-    build:
-      context: ../
-    volumes:
-      - ../src:/app/src
-      - ../api.yaml:/app.api.yaml
-    ports:
-      - "3000:3000"
     command:
       - yarn
       - dev:start
@@ -24,12 +17,5 @@ services:
       context: ../
       dockerfile: test/Dockerfile.test
     volumes:
-      - ./api.spec.js:/app/api.spec.js
-    depends_on:
-      - api
-    links:
-      - api
-    command:
-      - yarn
-      - dev:start
+      - ./test/api.spec.js:/app/api.spec.js
     tty: true

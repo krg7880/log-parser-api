@@ -14,18 +14,29 @@ The application is designed with the spcified requirements and some additional a
 
 Hot reloading is enabled to facilitate rapid testing and tight-feedback during development. Follow the steps below to being developing additional features:
 
-**Start the main and test processes**
+**CI/CD**
+
+Brings up the containers, executes the integration test and shut down.
 
 ```
 make test
 ```
 
-**Testing**
+**Development**
 
-- Edit any `*.spec.js` file in the `/test/` to have the spec rerun
-- Edit any `*.js` file in `/src/` directory to see how that affects the test
+Brings up the containers _(app & test)_ for development purposes. The code gets mounted into the contianer and the application hot-reloads to pick up changes -- same applies to the test container.
 
-For example, to test that the OA3 validation works, modify the respone payload for any of the three routes and see if the spec fails.
+```
+make dev
+```
+
+**API Only**
+
+Bring up just the API by running the following command:
+
+```
+make up
+```
 
 **Browser Testing**
 
@@ -34,6 +45,7 @@ Below are endpoints that you can test via your browser. Note that you may need t
 - [All application errors](http://localhost:3000/errors/)
 - [Application specific errors](http://localhost:3000/errors/api-gateway/)
 - [Instance specific errors](http://localhost:3000/errors/api-gateway/ffd3082fe09d)
+- [OpenAPI Editor](http://localhost:3000)
 
 **Shutting down**
 

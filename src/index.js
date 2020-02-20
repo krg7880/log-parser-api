@@ -61,14 +61,11 @@ const reportErrors = (errors) => {
   }
 }
 
-// get all errors
-// @example: http://localhost:3000/errors
 router.get('/errors', async (ctx) => {
   ctx.log.info('Fetching all errors')
 
   const results = await processLogFile(logFile)
 
-  // log to stdout
   reportErrors(results)
 
   const allErrors = formatErrors(results)
@@ -80,8 +77,6 @@ router.get('/errors', async (ctx) => {
   }
 })
 
-// get all errors specific to an app
-// @example: http://localhost:3000/errors/api-gateway
 router.get('/errors/:appId', async (ctx) => {
   ctx.log.info('fetching application errors')
 
@@ -91,7 +86,6 @@ router.get('/errors/:appId', async (ctx) => {
 
   const results = await processLogFile(logFile)
 
-  // log to stdout
   reportErrors(results)
 
   const [applicationErrors] = formatApplicationErrors(appId, results)
@@ -103,8 +97,6 @@ router.get('/errors/:appId', async (ctx) => {
   }
 })
 
-// get all errors specific to an instance of an app
-// @example: http://localhost:3000/errors/api-gateway/ffd3082fe09d
 router.get('/errors/:appId/:instanceId', async (ctx) => {
   ctx.log.info('fetching instance errors')
 
@@ -115,7 +107,6 @@ router.get('/errors/:appId/:instanceId', async (ctx) => {
 
   const results = await processLogFile(logFile)
 
-  // log to stdout
   reportErrors(results)
 
   const [instanceErrors] = formatInstanceErrors(appId, instanceId, results)
