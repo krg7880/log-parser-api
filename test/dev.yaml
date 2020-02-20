@@ -1,0 +1,21 @@
+version: "3.2"
+services:
+  api:
+    volumes:
+      - ../src:/app/src
+      - ../api.yaml:/app.api.yaml
+    command:
+      - yarn
+      - dev:start
+
+  service-wait:
+    image: waisbrot/wait
+    depends_on:
+      - api
+    environment:
+      - TARGETS=api:3000
+
+  test:
+    command:
+      - yarn
+      - dev:start
