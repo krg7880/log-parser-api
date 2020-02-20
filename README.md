@@ -2,6 +2,14 @@
 
 Simple application to parse an error log file to aggregate total errors produced by instances of a replicated application as well as total number of errors per replica.
 
+## Assumptions
+
+The application is designed with the spcified requirements and some additional assumptions in mind:
+
+- There's multiple applications errors in a log
+- We want to target specific application
+- We want to target specific instances
+
 ## Usage
 
 Hot reloading is enabled to facilitate rapid testing and tight-feedback during development. Follow the steps below to being developing additional features:
