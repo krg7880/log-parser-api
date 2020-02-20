@@ -1,0 +1,35 @@
+version: "3.2"
+services:
+  api:
+    build:
+      context: ../
+    volumes:
+      - ../src:/app/src
+      - ../api.yaml:/app.api.yaml
+    ports:
+      - "3000:3000"
+    command:
+      - yarn
+      - dev:start
+
+  service-wait:
+    image: waisbrot/wait
+    depends_on:
+      - api
+    environment:
+      - TARGETS=api:3000
+
+  test:
+    build:
+      context: ../
+      dockerfile: test/Dockerfile.test
+    volumes:
+      - ./api.spec.js:/app/api.spec.js
+    depends_on:
+      - api
+    links:
+      - api
+    command:
+      - yarn
+      - dev:start
+    tty: true

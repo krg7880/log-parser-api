@@ -1,0 +1,173 @@
+openapi: "3.0.0"
+info:
+  version: 0.0.1
+  title: API Log Parser
+  description: |
+    API service for parsing and reporting application errors
+servers:
+  - description: Local development server
+    url: http://localhost:3000
+
+security:
+  - bearerAuth: []
+
+paths:
+  /errors:
+    get:
+      summary: Get all errors
+      description: Get errors from all applications and instances of said app.
+      responses:
+        200:
+          description: "Successful response of errors"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        400:
+          description: "Bad request"
+        500:
+          description: "Request failed due to internal error"
+
+  /errors/{appId}:
+    get:
+      summary: Get errors generated from {appId}
+      description: Get errors from all instances of {appId}.
+      parameters:
+        - in: path
+          name: appId
+          schema:
+            type: string
+          required: true
+          description: ID of the application
+          example: api-gateway
+      responses:
+        200:
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationErrorResponse"
+        400:
+          description: "Bad request"
+        500:
+          description: "Request failed due to internal error"
+
+  /errors/{appId}/{instanceId}:
+    get:
+      summary: Get errors generated from {appId}
+      description: Get errors {instanceId} of {appId}.
+      parameters:
+        - in: path
+          name: appId
+          schema:
+            type: string
+          required: true
+          description: ID of the application
+          example: api-gateway
+        - in: path
+          name: instanceId
+          schema:
+            type: string
+          required: true
+          description: ID of the application instance
+          example: ffd3082fe09d
+      responses:
+        200:
+          description: "Errors were found from {instanceId}"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstanceErrorResponse"
+        400:
+          description: "Bad request"
+        500:
+          description: "Request failed due to internal error"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: string
+          description: status of the response
+          example: "success"
+        data:
+          type: array
+          description: collection of errors from various applications
+          items:
+            $ref: "#/components/schemas/ErrorItem"
+
+    ApplicationErrorResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: string
+          description: status of the response
+          example: "success"
+        data:
+          type: object
+          description: collection of errors from various applications
+          $ref: "#/components/schemas/ErrorItem"
+
+    InstanceErrorResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: string
+          description: status of the response
+          example: "success"
+        data:
+          type: object
+          description: collection of errors from various applications
+          $ref: "#/components/schemas/InstanceItem"
+
+    ErrorItem:
+      type: object
+      required:
+        - applicationId
+        - totalErrors
+        - instances
+      properties:
+        applicationId:
+          type: string
+          description: ID of the application
+          example: api-gateway
+        totalErrors:
+          type: number
+          example: 100
+          format: int32
+        instances:
+          type: array
+          items:
+            $ref: "#/components/schemas/InstanceItem"
+
+    InstanceItem:
+      type: object
+      required:
+        - instanceId
+        - totalErrors
+      properties:
+        instanceId:
+          type: string
+          description: ID of an instance of an application
+          example: ffd3082fe09d
+        totalErrors:
+          type: number
+          example: 10
+          format: int32
