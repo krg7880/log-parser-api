@@ -11,8 +11,6 @@ COPY ./yarn.lock yarn.lock
 RUN yarn install
 
 RUN pwd
-RUN ls -lart
-RUN ls -lart node_modules
 
 CMD ["yarn", "start"]
 
